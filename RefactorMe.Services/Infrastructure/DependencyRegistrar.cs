@@ -1,11 +1,8 @@
 ﻿using Autofac;
 using RefactorMe.Core.Infrastructure;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RefactorMe.Services.Infrastructure
 {
@@ -14,7 +11,6 @@ namespace RefactorMe.Services.Infrastructure
         public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder)
         {
             // Register for Service
-            // i assume your service interfaces inherit from IService
             Assembly ass = typeof(IService).GetTypeInfo().Assembly;
 
             // get all concrete types which implements IService

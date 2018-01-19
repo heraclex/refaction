@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RefactorMe.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
     }
 }
