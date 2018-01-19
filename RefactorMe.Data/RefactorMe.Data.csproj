@@ -54,15 +54,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Infrastructure\ApplicationDbContext.cs" />
+    <Compile Include="Entities\ProductOption.cs" />
+    <Compile Include="Entities\Product.cs" />
+    <Compile Include="Infrastructure\DataBaseStartupTask.cs" />
+    <Compile Include="Infrastructure\DependencyRegistrar.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="Mappings\ProductOptionMap.cs" />
+    <Compile Include="Mappings\ProductMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Entities\" />
+    <ProjectReference Include="..\RefactorMe.Core\RefactorMe.Core.csproj">
+      <Project>{8cf5a2c9-ab58-4d68-9107-210485fa8235}</Project>
+      <Name>RefactorMe.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

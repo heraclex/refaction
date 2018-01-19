@@ -152,7 +152,20 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\RefactorMe.Core\RefactorMe.Core.csproj">
+      <Project>{8cf5a2c9-ab58-4d68-9107-210485fa8235}</Project>
+      <Name>RefactorMe.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefactorMe.Data\RefactorMe.Data.csproj">
+      <Project>{0982135b-d614-4edc-95b6-d54450f67a61}</Project>
+      <Name>RefactorMe.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefactorMe.Services\RefactorMe.Services.csproj">
+      <Project>{451c4fc0-fe3f-4867-a831-9a331921ea7b}</Project>
+      <Name>RefactorMe.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

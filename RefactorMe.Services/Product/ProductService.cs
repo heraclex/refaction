@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RefactorMe.Data
+namespace RefactorMe.Services
 {
-    public class Class1
+    public class ProductService
     {
     }
 }
