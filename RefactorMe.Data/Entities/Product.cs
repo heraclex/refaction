@@ -9,6 +9,11 @@ namespace RefactorMe.Data.Entities
 {
     public class Product : BaseEntity
     {
+        public Product()
+        {
+            this.Id = new Guid();
+        }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

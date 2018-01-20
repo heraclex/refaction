@@ -6,24 +6,26 @@ using System.Collections.Generic;
 
 namespace refactor_me.Controllers
 {
-    public class ProductsController : ApiController
+    [RoutePrefix("api/products/{productId}/options")]
+    public class ProductOptionsController : ApiController
     {
         private readonly IProductService productService;
-
-        public ProductsController(IProductService productService)
+        public ProductOptionsController(IProductService productService)
         {
             this.productService = productService;
         }
 
-        public IEnumerable<string> Get()
+        public IEnumerable<string> Get(int productId)
         {
-            //var prods = this.productService.GetAllProducts();
+            //var prods = this.productService.GetAllProductOptions(new Guid());
 
-            return new string[] { "value1", "value2" };            
+            return new string[] { "value1", "value2" };
+
+            
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public string Get(int productId, int id)
         {
             return "value";
         }

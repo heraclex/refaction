@@ -58,11 +58,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\AutoMapperExtensions.cs" />
+    <Compile Include="Infrastructure\ServiceStartupTask.cs" />
     <Compile Include="Infrastructure\DependencyRegistrar.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Product\IProductService.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="Product\ProductService.cs" />
+    <Compile Include="ModelProfiles\ProductModelProfiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,5 +82,6 @@
       <Name>RefactorMe.Data</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
