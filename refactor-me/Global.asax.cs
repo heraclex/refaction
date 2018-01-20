@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Autofac.Integration.WebApi;
 using System.Web.Http;
-using System.Web.Routing;
+using RefactorMe.Core.Infrastructure;
 
 namespace refactor_me
 {
@@ -11,6 +8,14 @@ namespace refactor_me
     {
         protected void Application_Start()
         {
+            // Engine Start
+            EngineContext.Initialize();
+
+            // Register DI Resolver
+            GlobalConfiguration.Configuration.DependencyResolver = 
+                new AutofacWebApiDependencyResolver(
+                    EngineContext.Current.ContainerManager.Container);
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }

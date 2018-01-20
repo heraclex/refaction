@@ -4,47 +4,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RefactorMe.Data.Entities;
+using RefactorMe.Data;
+using RefactorMe.Core.Exceptions;
+using RefactorMe.Services.Models;
 
 namespace RefactorMe.Services
 {
     public class ProductService : IProductService
     {
-        public Product DeletePtoduct(Product entity)
+        private readonly IRepository<Product> productRepo;
+
+        public ProductService(IRepository<Product> productRepo)
+        {
+            this.productRepo = productRepo;
+        }
+
+        public ProductModel DeleteProduct(ProductModel model)
+        {
+            if (model == null)
+            {
+                throw new CoreException("ProductModel is null");
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public IList<ProductModel> FindProductsByName()
         {
             throw new NotImplementedException();
         }
 
-        public IList<Product> FindProductsByName()
+        public IList<ProductModel.ProductOptionModel> GetAllProductOptions(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public IList<ProductOption> GetAllProductOptions(Guid id)
+        public IList<ProductModel> GetAllProducts()
         {
             throw new NotImplementedException();
         }
 
-        public IList<Product> GetAllProducts()
+        public ProductModel GetProductById(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Product GetProductById(Guid id)
+        public ProductModel.ProductOptionModel GetProductOptionById(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public ProductOption GetProductOptionById(Guid id)
+        public ProductModel SaveOrUpdateProduct(ProductModel model)
         {
             throw new NotImplementedException();
         }
 
-        public ProductOption SaveOrUpdateProductOption(ProductOption entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Product SaveOrUpdatePtoduct(Product entity)
+        public ProductModel.ProductOptionModel SaveOrUpdateProductOption(ProductModel.ProductOptionModel model)
         {
             throw new NotImplementedException();
         }

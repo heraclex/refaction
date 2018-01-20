@@ -1,4 +1,5 @@
 ﻿using RefactorMe.Data.Entities;
+using RefactorMe.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,31 +33,31 @@ namespace RefactorMe.Services
         /// gets all products.
         /// </summary>
         /// <returns></returns>
-        IList<Product> GetAllProducts();
+        IList<ProductModel> GetAllProducts();
 
         /// <summary>
         /// Find Products ByName
         /// </summary>
         /// <returns></returns>
-        IList<Product> FindProductsByName();
+        IList<ProductModel> FindProductsByName();
 
         /// <summary>
         /// Get Product By Id
         /// </summary>
         /// <returns></returns>
-        Product GetProductById(Guid id);
+        ProductModel GetProductById(Guid id);
 
         /// <summary>
         /// Get Product By Id
         /// </summary>
         /// <returns></returns>
-        Product SaveOrUpdatePtoduct(Product entity);
+        ProductModel SaveOrUpdateProduct(ProductModel model);
 
         /// <summary>
         /// Get Product By Id
         /// </summary>
         /// <returns></returns>
-        Product DeletePtoduct(Product entity);
+        ProductModel DeleteProduct(ProductModel model);
 
         #endregion
 
@@ -66,19 +67,19 @@ namespace RefactorMe.Services
         /// gets options relate to product.
         /// </summary>
         /// <returns></returns>
-        IList<ProductOption> GetAllProductOptions(Guid id);
+        IList<ProductModel.ProductOptionModel> GetAllProductOptions(Guid id);
 
         /// <summary>
         /// Get Product By Id
         /// </summary>
         /// <returns></returns>
-        ProductOption GetProductOptionById(Guid id);
+        ProductModel.ProductOptionModel GetProductOptionById(Guid id);
 
         /// <summary>
         /// Get Product By Id
         /// </summary>
         /// <returns></returns>
-        ProductOption SaveOrUpdateProductOption(ProductOption entity);
+        ProductModel.ProductOptionModel SaveOrUpdateProductOption(ProductModel.ProductOptionModel model);
 
         #endregion
     }
