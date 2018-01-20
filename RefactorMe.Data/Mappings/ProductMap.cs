@@ -17,7 +17,7 @@ namespace RefactorMe.Data.Mappings
 
             // Delete list options related on delete products
             this.HasMany(p => p.Options)
-                .WithOptional(b => b.Product)
+                .WithRequired(b => b.Product)
                 .HasForeignKey(j => j.ProductId)
                 .WillCascadeOnDelete(true);
         }

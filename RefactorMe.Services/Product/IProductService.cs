@@ -12,6 +12,8 @@ namespace RefactorMe.Services
     {
         #region products
 
+        bool IsProductExist(Guid id);
+
         /// <summary>
         /// gets all products.
         /// </summary>
@@ -31,10 +33,16 @@ namespace RefactorMe.Services
         ProductModel GetProductById(Guid id);
 
         /// <summary>
-        /// SaveOrUpdateProduct
+        /// InsertProduct
         /// </summary>
         /// <returns></returns>
-        ProductModel SaveOrUpdateProduct(ProductModel model);
+        ProductModel InsertProduct(ProductModel model);
+
+        /// <summary>
+        /// UpdateProduct
+        /// </summary>
+        /// <returns></returns>
+        ProductModel UpdateProduct(ProductModel model);
 
         /// <summary>
         /// Delete Product
@@ -45,6 +53,8 @@ namespace RefactorMe.Services
         #endregion
 
         #region product options
+
+        bool IsProductOptionExist(Guid productId, Guid productOptionId);
 
         /// <summary>
         /// gets options relate to product.
@@ -59,10 +69,16 @@ namespace RefactorMe.Services
         ProductModel.ProductOptionModel GetProductOptionById(Guid productId, Guid productOptionId);
 
         /// <summary>
-        /// Save Or Update Product Option
+        /// InsertProductOption
         /// </summary>
         /// <returns></returns>
-        ProductModel.ProductOptionModel SaveOrUpdateProductOption(Guid productId, ProductModel.ProductOptionModel model);
+        ProductModel.ProductOptionModel InsertProductOption(Guid productId, ProductModel.ProductOptionModel model);
+
+        /// <summary>
+        /// UpdateProductOption
+        /// </summary>
+        /// <returns></returns>
+        ProductModel.ProductOptionModel UpdateProductOption(ProductModel.ProductOptionModel model);
 
         /// <summary>
         /// Delete Product
@@ -71,9 +87,5 @@ namespace RefactorMe.Services
         void DeleteProductOption(Guid id);
 
         #endregion
-
-        bool IsProductExist(Guid id);
-
-        bool IsProductOptionExist(Guid productId, Guid productOptionId);
     }
 }

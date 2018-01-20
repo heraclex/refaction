@@ -5,6 +5,7 @@ using RefactorMe.Services;
 using System.Collections.Generic;
 using RefactorMe.Services.Models;
 using refactor_me.Attributes;
+using System.Threading.Tasks;
 
 namespace refactor_me.Controllers
 {
@@ -22,9 +23,12 @@ namespace refactor_me.Controllers
         #region products
 
         //GET /products - gets all products.
-        public IEnumerable<ProductModel> Get()
+        public IHttpActionResult Get()
         {
-            return this.productService.GetAllProducts();
+            return Ok(new
+            {
+                Items = this.productService.GetAllProducts()
+            });
         }
 
         // GET /products/{id} - gets the project that matches the specified ID - ID is a GUID.
@@ -38,19 +42,25 @@ namespace refactor_me.Controllers
         }
 
         //GET /products? name = { name } -- finds all products matching the specified name.
-        public IEnumerable<ProductModel> Get(string name)
+        public IHttpActionResult Get(string name)
         {
-            return this.productService.FindProductsByName(name);
+            //return this.productService.FindProductsByName(name);
+
+            return Ok(new
+            {
+                Items = this.productService.FindProductsByName(name)
+            });
         }
 
         // POST /products - creates a new product.
-        public void Post(ProductModel model)
+        public ProductModel Post(ProductModel model)
         {
-            var newProduct = this.productService.SaveOrUpdateProduct(model);
+            // return new one
+            return this.productService.InsertProduct(model);
         }
 
         // PUT /products/{id} - updates a product.
-        public void Put(Guid id, ProductModel model)
+        public ProductModel Put(Guid id, ProductModel model)
         {
             if (!id.Equals(model.Id))
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable);
@@ -58,16 +68,19 @@ namespace refactor_me.Controllers
             if (!this.productService.IsProductExist(id))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            this.productService.SaveOrUpdateProduct(model);
+            // return latest updates
+            return this.productService.UpdateProduct(model);
         }
 
         // DELETE /products/{id} - deletes a product and its options.
-        public void Delete(Guid id)
+        public IHttpActionResult Delete(Guid id)
         {
             if (!this.productService.IsProductExist(id))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             this.productService.DeleteProduct(id);
+
+            return Ok(new { Message = "Delete Success" });
         }
 
         #endregion
@@ -94,35 +107,37 @@ namespace refactor_me.Controllers
 
         // POST /products/{id}/options - adds a new product option to the specified product.
         [HttpPost]
-        [Route("{productId:guid}/options/{optionId}")]
-        public void CreateOption(Guid productId, ProductModel.ProductOptionModel optionModel)
+        [Route("{productId:guid}/options")]
+        public ProductModel.ProductOptionModel CreateOption(Guid productId, ProductModel.ProductOptionModel optionModel)
         {
             if (!this.productService.IsProductExist(productId))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            this.productService.SaveOrUpdateProductOption(productId, optionModel);
+            // return new added-option
+            return this.productService.InsertProductOption(productId, optionModel);
         }
 
         // PUT /products/{ productId}/options/{optionId} - updates the specified product option.
         [HttpPut]
         [Route("{productId:guid}/options/{optionId}")]
-        public void UpdateOption(Guid productId, Guid optionId, ProductModel.ProductOptionModel optionModel)
+        public ProductModel.ProductOptionModel UpdateOption(Guid productId, Guid optionId, ProductModel.ProductOptionModel optionModel)
         {
             if (!this.productService.IsProductOptionExist(productId, optionId))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            this.productService.SaveOrUpdateProductOption(productId, optionModel);
+            // return latest update
+            return this.productService.UpdateProductOption(optionModel);
         }
 
         // DELETE /products/{productId}/options/{optionId} - deletes the specified product option.
         [HttpDelete]
-        [Route("{productId}/options/{optionId} ")]
-        public void DeleteOption(Guid productId, Guid optionId)
+        [Route("{productId}/options/{optionId}")]
+        public IHttpActionResult DeleteOption(Guid productId, Guid optionId)
         {
             if (!this.productService.IsProductOptionExist(productId, optionId))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             this.productService.DeleteProductOption(optionId);
+
+            return Ok(new { Message = "Delete Success" });
         }
 
         #endregion

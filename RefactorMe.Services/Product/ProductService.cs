@@ -25,41 +25,7 @@ namespace RefactorMe.Services
             this.productOptionRepo = productOptionRepo;
         }
 
-        public void DeleteProduct(Guid id)
-        {
-            var entity = this.productRepo.GetById(id);
-            if (entity == null)
-            {
-                throw new CoreException("Product not found");
-            }
-
-            this.productRepo.Delete(entity);
-        }
-
-        public void DeleteProductOption(Guid id)
-        {
-            var entity = this.productOptionRepo.GetById(id);
-            if (entity == null)
-            {
-                throw new CoreException("ProductOption not found");
-            }
-
-            this.productOptionRepo.Delete(entity);
-        }
-
-        public IList<ProductModel> FindProductsByName(string prodName)
-        {
-            var products = this.productRepo.Table.Where(x => x.Name.ToLower().Contains(prodName.ToLower())).ToList();
-            return products != null ? products.MapTo<ProductModel>() : null;
-        }
-
-        public IList<ProductModel.ProductOptionModel> GetAllProductOptions(Guid id)
-        {
-            var productOptions = this.productRepo.Table.Where(prod=>prod.Id == id)
-                .SelectMany(prod => prod.Options).ToList();
-
-            return productOptions != null ? productOptions.MapTo<ProductModel.ProductOptionModel>() : null;
-        }
+        #region Products
 
         public IList<ProductModel> GetAllProducts()
         {
@@ -75,73 +41,114 @@ namespace RefactorMe.Services
             return product != null ? product.MapTo<ProductModel>() : null;
         }
 
-        public ProductModel.ProductOptionModel GetProductOptionById(
-            Guid productId, Guid productOptionId)
+        public IList<ProductModel> FindProductsByName(string prodName)
         {
-            var productOptions = this.productRepo.Table.Where(prod => prod.Id == productId)
-                .SelectMany(prod => prod.Options.Where(opt=>opt.Id == productOptionId)).FirstOrDefault();
-
-            return productOptions != null ? productOptions.MapTo<ProductModel.ProductOptionModel>() : null;
+            var products = this.productRepo.Table.Where(x => x.Name.ToLower().Contains(prodName.ToLower())).ToList();
+            return products != null ? products.MapTo<ProductModel>() : null;
         }
 
-        public bool IsProductExist(Guid id)
+        public void DeleteProduct(Guid id)
         {
-            return this.productRepo.Table.Any(x => x.Id == id);
-        }
-
-        public bool IsProductOptionExist(Guid productId, Guid productOptionId)
-        {
-            return this.productRepo.Table.Where(x => x.Id == productId).Any(x=>x.Options.Any(opt=>opt.Id == productOptionId));
-        }
-
-        public ProductModel SaveOrUpdateProduct(ProductModel model)
-        {
-            var entity = model.Id != null ? this.productRepo.GetById(model.Id) : new Product();
+            var entity = this.productRepo.GetById(id);
             if (entity == null)
             {
                 throw new CoreException("Product not found");
             }
 
-            entity = model.MapTo<Product>();
+            this.productRepo.Delete(entity);
+        }
 
-            if (model.Id != null)
-            {
-                this.productRepo.Update(entity);
-            }
-            else
-            {
-                this.productRepo.Insert(entity);
-            }
-
+        public ProductModel InsertProduct(ProductModel model)
+        {
+            var entity = model.MapTo<Product>();
+            this.productRepo.Insert(entity);
             return entity.MapTo<ProductModel>();
         }
 
-        public ProductModel.ProductOptionModel SaveOrUpdateProductOption(
+        public ProductModel UpdateProduct(ProductModel model)
+        {
+            var entity = this.productRepo.GetById(model.Id);
+
+            if (entity == null)
+            {
+                throw new CoreException("Product not found");
+            }
+            entity.Name = model.Name;
+            entity.Description = model.Description;
+            entity.Price = model.Price;
+            entity.DeliveryPrice = model.DeliveryPrice;
+            this.productRepo.Update(entity);
+            return entity.MapTo<ProductModel>();
+        }
+        
+        public bool IsProductExist(Guid id)
+        {
+            return this.productRepo.Table.Any(x => x.Id == id);
+        }
+
+        #endregion
+
+        #region ProductOptions
+
+        public void DeleteProductOption(Guid id)
+        {
+            var entity = this.productOptionRepo.GetById(id);
+            if (entity == null)
+            {
+                throw new CoreException("ProductOption not found");
+            }
+
+            this.productOptionRepo.Delete(entity);
+        }
+
+        public ProductModel.ProductOptionModel GetProductOptionById(
+            Guid productId, Guid productOptionId)
+        {
+            var productOptions = this.productRepo.Table.Where(prod => prod.Id == productId)
+                .SelectMany(prod => prod.Options.Where(opt => opt.Id == productOptionId)).FirstOrDefault();
+
+            return productOptions != null ? productOptions.MapTo<ProductModel.ProductOptionModel>() : null;
+        }
+
+        public ProductModel.ProductOptionModel InsertProductOption(
             Guid productId, ProductModel.ProductOptionModel model)
         {
-            var entity = model.Id != null 
-                ? this.productOptionRepo.Table
-                        .Where(opt => opt.ProductId == productId && opt.Id == model.Id)
-                        .FirstOrDefault()
-                : new ProductOption();
+            var entity = model.MapTo<ProductOption>();
+            entity.ProductId = productId;
+
+            this.productOptionRepo.Insert(entity);
+            return entity.MapTo<ProductModel.ProductOptionModel>();
+        }
+
+        public bool IsProductOptionExist(Guid productId, Guid productOptionId)
+        {
+            return this.productRepo.Table.Where(x => x.Id == productId).Any(x => x.Options.Any(opt => opt.Id == productOptionId));
+        }
+
+        public IList<ProductModel.ProductOptionModel> GetAllProductOptions(Guid id)
+        {
+            var productOptions = this.productRepo.Table.Where(prod => prod.Id == id)
+                .SelectMany(prod => prod.Options).ToList();
+
+            return productOptions != null ? productOptions.MapTo<ProductModel.ProductOptionModel>() : null;
+        }
+        
+        public ProductModel.ProductOptionModel UpdateProductOption(ProductModel.ProductOptionModel model)
+        {
+            var entity = this.productOptionRepo.GetById(model.Id);
 
             if (entity == null)
             {
                 throw new CoreException("ProductOption not found");
             }
 
-            entity = model.MapTo<ProductOption>();
+            entity.Name = model.Name;
+            entity.Description = model.Description;
 
-            if (model.Id != null)
-            {
-                this.productOptionRepo.Update(entity);
-            }
-            else
-            {
-                this.productOptionRepo.Insert(entity);
-            }
-
+            this.productOptionRepo.Update(entity);
             return entity.MapTo<ProductModel.ProductOptionModel>();
         }
+
+        #endregion
     }
 }

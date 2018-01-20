@@ -18,5 +18,12 @@ namespace refactor_me
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
+
+        protected void Application_Error()
+        {
+            //var exception = Server.GetLastError();
+
+            //Debug.WriteLine(exception);
+        }
     }
 }
