@@ -1,13 +1,7 @@
 ﻿using Autofac;
 using RefactorMe.Core.Data;
 using RefactorMe.Core.Infrastructure;
-using RefactorMe.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RefactorMe.Data.Infrastructure
 {

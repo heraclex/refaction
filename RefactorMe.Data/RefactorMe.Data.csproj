@@ -56,7 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\ApplicationDbContext.cs" />
+    <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="Entities\ProductOption.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Infrastructure\DataBaseStartupTask.cs" />

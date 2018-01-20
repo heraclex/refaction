@@ -5,6 +5,6 @@ namespace RefactorMe.Core.Data
 {
     public abstract class BaseEntity
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefactorMe.Data", "Refactor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefactorMe.Services", "RefactorMe.Services\RefactorMe.Services.csproj", "{451C4FC0-FE3F-4867-A831-9A331921EA7B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6910BB39-D762-40A9-A009-9E5A23A12AA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefactorMe.ApiTest", "Tests\RefactorMe.ApiTest\RefactorMe.ApiTest.csproj", "{F21E94F6-F584-4B38-BAF6-CD536285674C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +37,16 @@ Global
 		{451C4FC0-FE3F-4867-A831-9A331921EA7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{451C4FC0-FE3F-4867-A831-9A331921EA7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{451C4FC0-FE3F-4867-A831-9A331921EA7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F21E94F6-F584-4B38-BAF6-CD536285674C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F21E94F6-F584-4B38-BAF6-CD536285674C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F21E94F6-F584-4B38-BAF6-CD536285674C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F21E94F6-F584-4B38-BAF6-CD536285674C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F21E94F6-F584-4B38-BAF6-CD536285674C} = {6910BB39-D762-40A9-A009-9E5A23A12AA4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27159240-920E-4DF0-B3B0-6A51506CC509}

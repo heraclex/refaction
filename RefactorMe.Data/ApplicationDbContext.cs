@@ -8,7 +8,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Reflection;
 
-namespace RefactorMe.Infrastructure.Data
+namespace RefactorMe.Data
 {
     public class ApplicationDbContext : DbContext, IDbContext
     {

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using RefactorMe.Services.Models;
 using refactor_me.Attributes;
 using System.Threading.Tasks;
+using System.Net.Http;
+using refactor_me.Models;
 
 namespace refactor_me.Controllers
 {
@@ -23,45 +25,46 @@ namespace refactor_me.Controllers
         #region products
 
         //GET /products - gets all products.
-        public IHttpActionResult Get()
+        public HttpResponseMessage Get()
         {
-            return Ok(new
-            {
-                Items = this.productService.GetAllProducts()
-            });
+            var products = this.productService.GetAllProducts();
+            return Request.CreateResponse(new ProductsReturn(products));
         }
 
         // GET /products/{id} - gets the project that matches the specified ID - ID is a GUID.
-        public ProductModel Get(Guid id)
+        public HttpResponseMessage Get(Guid id)
         {
             var productModel = this.productService.GetProductById(id);
             if (productModel == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return productModel;
+            return Request.CreateResponse(productModel);
         }
 
         //GET /products? name = { name } -- finds all products matching the specified name.
-        public IHttpActionResult Get(string name)
+        public HttpResponseMessage Get(string name)
         {
-            //return this.productService.FindProductsByName(name);
-
-            return Ok(new
-            {
-                Items = this.productService.FindProductsByName(name)
-            });
+            var resuts = this.productService.FindProductsByName(name);
+            return Request.CreateResponse(new ProductsReturn(resuts));
         }
 
         // POST /products - creates a new product.
-        public ProductModel Post(ProductModel model)
+        public HttpResponseMessage Post(ProductModel model)
         {
+            if(!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             // return new one
-            return this.productService.InsertProduct(model);
+            var result = this.productService.InsertProduct(model);
+            return Request.CreateResponse(result);
         }
 
         // PUT /products/{id} - updates a product.
-        public ProductModel Put(Guid id, ProductModel model)
+        public HttpResponseMessage Put(Guid id, ProductModel model)
         {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             if (!id.Equals(model.Id))
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable);
 
@@ -69,18 +72,18 @@ namespace refactor_me.Controllers
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             // return latest updates
-            return this.productService.UpdateProduct(model);
+            var result = this.productService.UpdateProduct(model);
+            return Request.CreateResponse(result);
         }
 
         // DELETE /products/{id} - deletes a product and its options.
-        public IHttpActionResult Delete(Guid id)
+        public HttpResponseMessage Delete(Guid id)
         {
             if (!this.productService.IsProductExist(id))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             this.productService.DeleteProduct(id);
-
-            return Ok(new { Message = "Delete Success" });
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         #endregion
@@ -90,54 +93,68 @@ namespace refactor_me.Controllers
         //GET /products/{ id}/options - finds all options for a specified product.
         [Route("{productId}/options")]
         [HttpGet]
-        public IEnumerable<ProductModel.ProductOptionModel> GetOptions(Guid productId)
+        public HttpResponseMessage GetOptions(Guid productId)
         {
-            return this.productService.GetAllProductOptions(productId);
+            var options = this.productService.GetAllProductOptions(productId);
+            return Request.CreateResponse(new ProductOptionsReturn(options));
         }
 
         //GET /products/{id}/options/{optionId} - finds the specified product option for the specified product.
         [Route("{productId:guid}/options/{optionId}")]
-        public ProductModel.ProductOptionModel GetOption(Guid productId, Guid optionId)
+        public HttpResponseMessage GetOption(Guid productId, Guid optionId)
         {
             if (!this.productService.IsProductOptionExist(productId, optionId))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            return this.productService.GetProductOptionById(productId, optionId);
+            
+            var option = this.productService.GetProductOptionById(productId, optionId);
+            return Request.CreateResponse(option);
         }
 
         // POST /products/{id}/options - adds a new product option to the specified product.
         [HttpPost]
         [Route("{productId:guid}/options")]
-        public ProductModel.ProductOptionModel CreateOption(Guid productId, ProductModel.ProductOptionModel optionModel)
+        public HttpResponseMessage CreateOption(Guid productId, ProductModel.ProductOptionModel optionModel)
         {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             if (!this.productService.IsProductExist(productId))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-            // return new added-option
-            return this.productService.InsertProductOption(productId, optionModel);
+
+            // return new one
+            var result = this.productService.InsertProductOption(productId, optionModel);
+            return Request.CreateResponse(result);
         }
 
         // PUT /products/{ productId}/options/{optionId} - updates the specified product option.
         [HttpPut]
         [Route("{productId:guid}/options/{optionId}")]
-        public ProductModel.ProductOptionModel UpdateOption(Guid productId, Guid optionId, ProductModel.ProductOptionModel optionModel)
+        public HttpResponseMessage UpdateOption(Guid productId, Guid optionId, ProductModel.ProductOptionModel optionModel)
         {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             if (!this.productService.IsProductOptionExist(productId, optionId))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-            // return latest update
-            return this.productService.UpdateProductOption(optionModel);
+            
+            // return latest updates
+            var result = this.productService.UpdateProductOption(optionModel);
+            return Request.CreateResponse(result);
         }
 
         // DELETE /products/{productId}/options/{optionId} - deletes the specified product option.
         [HttpDelete]
         [Route("{productId}/options/{optionId}")]
-        public IHttpActionResult DeleteOption(Guid productId, Guid optionId)
+        public HttpResponseMessage DeleteOption(Guid productId, Guid optionId)
         {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             if (!this.productService.IsProductOptionExist(productId, optionId))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             this.productService.DeleteProductOption(optionId);
-
-            return Ok(new { Message = "Delete Success" });
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         #endregion
