@@ -11,7 +11,7 @@ namespace RefactorMe.Services.Infrastructure
         public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder)
         {
             // Register for Service
-            Assembly ass = typeof(IService).GetTypeInfo().Assembly;
+            Assembly ass = typeFinder.GetAssemblies().First(x => x.FullName.Contains("Services"));//typeof(IService).GetTypeInfo().Assembly;
 
             // get all concrete types which implements IService
             var allServices = ass.GetTypes().Where(t =>

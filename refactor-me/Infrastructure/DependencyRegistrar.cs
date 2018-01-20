@@ -19,9 +19,6 @@ namespace refactor_me.Infrastructure
             // ability to load API controllers.
             var controllerTypes = typeFinder.GetAssemblies().ToArray();
 
-            // Register Controllers MVC             
-            //builder.RegisterControllers(controllerTypes);
-
             // Register Controllers API
             builder.RegisterApiControllers(controllerTypes);
         }
