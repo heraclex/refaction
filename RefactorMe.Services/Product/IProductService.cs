@@ -64,6 +64,16 @@ namespace RefactorMe.Services
         /// <returns></returns>
         ProductModel.ProductOptionModel SaveOrUpdateProductOption(Guid productId, ProductModel.ProductOptionModel model);
 
+        /// <summary>
+        /// Delete Product
+        /// </summary>
+        /// <returns></returns>
+        void DeleteProductOption(Guid id);
+
         #endregion
+
+        bool IsProductExist(Guid id);
+
+        bool IsProductOptionExist(Guid productId, Guid productOptionId);
     }
 }

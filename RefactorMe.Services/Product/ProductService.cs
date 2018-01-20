@@ -8,7 +8,6 @@ using RefactorMe.Data;
 using RefactorMe.Core.Exceptions;
 using RefactorMe.Services.Models;
 using RefactorMe.Services.Extensions;
-using RefactorMe.Core.Extensions;
 
 namespace RefactorMe.Services
 {
@@ -35,6 +34,17 @@ namespace RefactorMe.Services
             }
 
             this.productRepo.Delete(entity);
+        }
+
+        public void DeleteProductOption(Guid id)
+        {
+            var entity = this.productOptionRepo.GetById(id);
+            if (entity == null)
+            {
+                throw new CoreException("ProductOption not found");
+            }
+
+            this.productOptionRepo.Delete(entity);
         }
 
         public IList<ProductModel> FindProductsByName(string prodName)
@@ -72,6 +82,16 @@ namespace RefactorMe.Services
                 .SelectMany(prod => prod.Options.Where(opt=>opt.Id == productOptionId)).FirstOrDefault();
 
             return productOptions != null ? productOptions.MapTo<ProductModel.ProductOptionModel>() : null;
+        }
+
+        public bool IsProductExist(Guid id)
+        {
+            return this.productRepo.Table.Any(x => x.Id == id);
+        }
+
+        public bool IsProductOptionExist(Guid productId, Guid productOptionId)
+        {
+            return this.productRepo.Table.Where(x => x.Id == productId).Any(x=>x.Options.Any(opt=>opt.Id == productOptionId));
         }
 
         public ProductModel SaveOrUpdateProduct(ProductModel model)
@@ -118,7 +138,7 @@ namespace RefactorMe.Services
             }
             else
             {
-                this.productRepo.Insert(entity);
+                this.productOptionRepo.Insert(entity);
             }
 
             return entity.MapTo<ProductModel.ProductOptionModel>();

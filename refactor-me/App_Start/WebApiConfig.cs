@@ -19,6 +19,15 @@ namespace refactor_me
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            //config.Routes.MapHttpRoute(
+            //    name: "ProductOptionsApi",
+            //    routeTemplate: "api/products/{productId}/options/{id}",
+            //    defaults: new {
+            //        //controller = "Products",
+            //        productId = RouteParameter.Optional,
+            //        id = RouteParameter.Optional
+            //    });
         }
     }
 }

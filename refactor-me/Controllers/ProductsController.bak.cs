@@ -73,7 +73,7 @@ namespace refactor_me.Controllers
 
         [Route("{productId}/options/{id}")]
         [HttpGet]
-        public ProductOptionModel GetOption(Guid productId, Guid id)
+        public ProductOption GetOption(Guid productId, Guid id)
         {
             var option = new ProductOptionModel(id);
             if (option.IsNew)
