@@ -31,7 +31,8 @@ namespace refactor_me.Controllers
             return Request.CreateResponse(new ProductsReturn(products));
         }
 
-        // GET /products/{id} - gets the project that matches the specified ID - ID is a GUID.
+        // GET /products/{id} - gets the project that matches the specified ID - ID is a GUID.        
+        [Route("{id:guid}", Name = "GetProductById")]
         public HttpResponseMessage Get(Guid id)
         {
             var productModel = this.productService.GetProductById(id);
@@ -53,10 +54,14 @@ namespace refactor_me.Controllers
         {
             if(!ModelState.IsValid)
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
+            
+            var product = this.productService.InsertProduct(model);
 
-            // return new one
-            var result = this.productService.InsertProduct(model);
-            return Request.CreateResponse(result);
+            var response = Request.CreateResponse(HttpStatusCode.Created, product);
+            //NOTE: BUG, dont know why Url.Link return null
+            //response.Headers.Location = new Uri(Url.Link("GetProductById", new { id = product.Id }));
+            // return new product url
+            return response;
         }
 
         // PUT /products/{id} - updates a product.
@@ -100,7 +105,7 @@ namespace refactor_me.Controllers
         }
 
         //GET /products/{id}/options/{optionId} - finds the specified product option for the specified product.
-        [Route("{productId:guid}/options/{optionId:guid}")]
+        [Route("{productId:guid}/options/{optionId:guid}", Name = "GetOptionById")]
         public HttpResponseMessage GetOption(Guid productId, Guid optionId)
         {
             if (!this.productService.IsProductOptionExist(productId, optionId))
@@ -123,8 +128,13 @@ namespace refactor_me.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
 
             // return new one
-            var result = this.productService.InsertProductOption(productId, optionModel);
-            return Request.CreateResponse(result);
+            var productOption = this.productService.InsertProductOption(productId, optionModel);
+            //return Request.CreateResponse(productOption);
+
+            var response = Request.CreateResponse(HttpStatusCode.Created, productOption);
+            //response.Headers.Location = new Uri(Url.Link("GetOptionById", new { id = productId }));
+            // return new productOption url
+            return response;
         }
 
         // PUT /products/{ productId}/options/{optionId} - updates the specified product option.
