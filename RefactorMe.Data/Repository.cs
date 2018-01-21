@@ -76,7 +76,7 @@ namespace RefactorMe.Data
                 if (entity == null)
                     throw new ArgumentNullException("entity");
                 // assign new guid
-                entity.Id = Guid.NewGuid().ToString();
+                entity.Id = Guid.NewGuid();
                 this.Entities.Add(entity);
 
                 this._context.SaveChanges();

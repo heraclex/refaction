@@ -5,7 +5,7 @@ namespace RefactorMe.Services.Models
 {
     public class ProductModel
     {
-        public string Id { get; set; }
+        public Guid? Id { get; set; }
 
         [Required]
         [MaxLength(100, ErrorMessage = "MaxLength 100")]
@@ -21,7 +21,7 @@ namespace RefactorMe.Services.Models
 
         public partial class ProductOptionModel
         {
-            public string Id { get; set; }
+            public Guid? Id { get; set; }            
 
             [Required]
             [MaxLength(100, ErrorMessage = "MaxLength 100")]

@@ -36,7 +36,7 @@ namespace refactor_me.Controllers
         {
             var productModel = this.productService.GetProductById(id);
             if (productModel == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return Request.CreateResponse(HttpStatusCode.NotFound);
 
             return Request.CreateResponse(productModel);
         }
@@ -52,7 +52,7 @@ namespace refactor_me.Controllers
         public HttpResponseMessage Post(ProductModel model)
         {
             if(!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
 
             // return new one
             var result = this.productService.InsertProduct(model);
@@ -62,14 +62,15 @@ namespace refactor_me.Controllers
         // PUT /products/{id} - updates a product.
         public HttpResponseMessage Put(Guid id, ProductModel model)
         {
+            // Haveto convert error to client
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
 
             if (!id.Equals(model.Id))
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid Id");
 
             if (!this.productService.IsProductExist(id))
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return Request.CreateResponse(HttpStatusCode.NotFound);
 
             // return latest updates
             var result = this.productService.UpdateProduct(model);
@@ -91,8 +92,7 @@ namespace refactor_me.Controllers
         #region Product Options
 
         //GET /products/{ id}/options - finds all options for a specified product.
-        [Route("{productId}/options")]
-        [HttpGet]
+        [Route("{productId:guid}/options")]
         public HttpResponseMessage GetOptions(Guid productId)
         {
             var options = this.productService.GetAllProductOptions(productId);
@@ -100,11 +100,11 @@ namespace refactor_me.Controllers
         }
 
         //GET /products/{id}/options/{optionId} - finds the specified product option for the specified product.
-        [Route("{productId:guid}/options/{optionId}")]
+        [Route("{productId:guid}/options/{optionId:guid}")]
         public HttpResponseMessage GetOption(Guid productId, Guid optionId)
         {
             if (!this.productService.IsProductOptionExist(productId, optionId))
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return Request.CreateResponse(HttpStatusCode.NotFound);
             
             var option = this.productService.GetProductOptionById(productId, optionId);
             return Request.CreateResponse(option);
@@ -113,13 +113,14 @@ namespace refactor_me.Controllers
         // POST /products/{id}/options - adds a new product option to the specified product.
         [HttpPost]
         [Route("{productId:guid}/options")]
-        public HttpResponseMessage CreateOption(Guid productId, ProductModel.ProductOptionModel optionModel)
+        public HttpResponseMessage CreateOption(Guid productId, 
+            ProductModel.ProductOptionModel optionModel)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
 
             if (!this.productService.IsProductExist(productId))
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return Request.CreateResponse(HttpStatusCode.NotFound);
 
             // return new one
             var result = this.productService.InsertProductOption(productId, optionModel);
@@ -129,14 +130,16 @@ namespace refactor_me.Controllers
         // PUT /products/{ productId}/options/{optionId} - updates the specified product option.
         [HttpPut]
         [Route("{productId:guid}/options/{optionId}")]
-        public HttpResponseMessage UpdateOption(Guid productId, Guid optionId, ProductModel.ProductOptionModel optionModel)
+        public HttpResponseMessage UpdateOption(
+            Guid productId, Guid optionId, 
+            ProductModel.ProductOptionModel optionModel)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
 
             if (!this.productService.IsProductOptionExist(productId, optionId))
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+
             // return latest updates
             var result = this.productService.UpdateProductOption(optionModel);
             return Request.CreateResponse(result);
@@ -144,14 +147,11 @@ namespace refactor_me.Controllers
 
         // DELETE /products/{productId}/options/{optionId} - deletes the specified product option.
         [HttpDelete]
-        [Route("{productId}/options/{optionId}")]
+        [Route("{productId:guid}/options/{optionId:guid}")]
         public HttpResponseMessage DeleteOption(Guid productId, Guid optionId)
         {
-            if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-
             if (!this.productService.IsProductOptionExist(productId, optionId))
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return Request.CreateResponse(HttpStatusCode.NotFound);
 
             this.productService.DeleteProductOption(optionId);
             return Request.CreateResponse(HttpStatusCode.OK);
